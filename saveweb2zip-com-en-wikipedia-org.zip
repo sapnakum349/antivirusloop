@@ -1,0 +1,269 @@
+\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shield Antivirus</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0b1220;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 8%;
+      background: #111b2e;
+      border-bottom: 1px solid #24324a;
+    }
+
+    .logo {
+      color: #35e0a1;
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: #cbd5e1;
+      text-decoration: none;
+      margin-left: 24px;
+    }
+
+    nav a:hover {
+      color: #35e0a1;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 55px 20px 30px;
+    }
+
+    .hero h1 {
+      font-size: clamp(30px, 5vw, 46px);
+      margin-bottom: 15px;
+    }
+
+    .hero h1 span {
+      color: #35e0a1;
+    }
+
+    .hero p {
+      color: #a8b4c8;
+      line-height: 1.7;
+    }
+
+    .dashboard {
+      max-width: 950px;
+      margin: 25px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #152137;
+      border: 1px solid #263751;
+      border-radius: 16px;
+      padding: 28px 20px;
+      text-align: center;
+    }
+
+    .icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+    }
+
+    .card h3 {
+      margin-bottom: 12px;
+    }
+
+    .status {
+      color: #35e0a1;
+      font-weight: bold;
+    }
+
+    .scan-card {
+      max-width: 610px;
+      margin: 10px auto 45px;
+      padding: 30px 20px;
+      text-align: center;
+      background: #152137;
+      border: 1px solid #263751;
+      border-radius: 18px;
+    }
+
+    .shield {
+      font-size: 65px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background: #35e0a1;
+      color: #07150f;
+      border: none;
+      border-radius: 9px;
+      padding: 14px 28px;
+      margin-top: 22px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #22c98b;
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
+    .progress {
+      height: 9px;
+      background: #28364c;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 22px 0 12px;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: #35e0a1;
+      transition: width 0.2s;
+    }
+
+    #scanStatus {
+      color: #a8b4c8;
+      min-height: 22px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #8190a8;
+      border-top: 1px solid #24324a;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      nav a {
+        margin: 0 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">?? Shield Antivirus</div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#security">Security</a>
+      <a href="#scan">Scan</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <h1>Your Digital World, <span>Protected.</span></h1>
+    <p>Stay informed about your security with a clean,
+       simple antivirus dashboard.</p>
+  </section>
+
+  <section class="dashboard" id="security">
+    <div class="card">
+      <div class="icon">???</div>
+      <h3>Protection Status</h3>
+      <p class="status">Demo Mode</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">??</div>
+      <h3>Threat Detection</h3>
+      <p id="threats">No scan performed</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">??</div>
+      <h3>Security Updates</h3>
+      <p>Demo information only</p>
+    </div>
+  </section>
+
+  <section class="scan-card" id="scan">
+    <div class="shield">???</div>
+    <h2>Security Scanner</h2>
+    <p style="color:#a8b4c8; margin-top:12px">
+      Start a simulated scan from this demo dashboard.
+    </p>
+
+    <div class="progress">
+      <div class="bar" id="bar"></div>
+    </div>
+
+    <p id="scanStatus" role="status" aria-live="polite">
+      Ready to start demo scan
+    </p>
+
+    <button id="scanBtn" onclick="startScan()">
+      Start Scan
+    </button>
+  </section>
+
+  <footer>
+    © 2026 Shield Antivirus | Website Demo
+  </footer>
+
+  <script>
+    let scanning = false;
+
+    function startScan() {
+      if (scanning) return;
+      scanning = true;
+
+      const bar = document.getElementById("bar");
+      const status = document.getElementById("scanStatus");
+      const threats = document.getElementById("threats");
+      const button = document.getElementById("scanBtn");
+
+      let progress = 0;
+      button.disabled = true;
+      button.textContent = "Scanning...";
+      threats.textContent = "Scan in progress";
+
+      const timer = setInterval(() => {
+        progress += 5;
+        bar.style.width = progress + "%";
+        status.textContent = "Demo scan progress: " + progress + "%";
+
+        if (progress >= 100) {
+          clearInterval(timer);
+          status.textContent =
+            "Demo scan complete. No files were actually scanned.";
+          threats.textContent = "No real scan performed";
+          button.textContent = "Scan Again";
+          button.disabled = false;
+          scanning = false;
+        }
+      }, 150);
+    }
+  </script>
+
+</body>
+</html>
